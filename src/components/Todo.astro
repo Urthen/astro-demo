@@ -10,7 +10,7 @@ const todoItems = await getCollection('todoItems');
     <li>
         {todoItems.map((item) => (
             <div>
-                <a href={`items/${item.id}`}>
+                <a href={`/items/${item.id}`}>
                     <h2>{item.data.name}</h2>
                 </a>
                 <p>{item.data.description}</p>
