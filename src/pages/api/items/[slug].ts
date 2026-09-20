@@ -13,7 +13,8 @@ export async function GET({ params, request }: { params: Record<string, string>;
     await ASTRO_TEST_KV.put("popularity_" + params.slug, value);
     return new Response(
         JSON.stringify({
-            message: "Hello from the API test route!",
+            message: env.ASTRO_TEST_VAR,
+            secret: env.ASTRO_TEST_SECRET,
             slug: params.slug,
             queryParams: new URL(request.url).searchParams.toString(),
             requestUrl: request.url,

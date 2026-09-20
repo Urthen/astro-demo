@@ -18,5 +18,8 @@
 			"binding": "ASTRO_TEST_KV",
 			"id": "dd3b1299e6f74bf8ad3dc3c58cb0ccbc"
 		}
-	]
+	],
+	"vars": {
+		"ASTRO_TEST_VAR": "Hello from Astro!"
+	}
 }
