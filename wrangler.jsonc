@@ -1,7 +1,9 @@
 {
 	"$schema": "./node_modules/wrangler/config-schema.json",
 	"compatibility_date": "2026-09-18",
-	"compatibility_flags": ["global_fetch_strictly_public"],
+	"compatibility_flags": [
+		"global_fetch_strictly_public"
+	],
 	"name": "astro-demo",
 	"main": "@astrojs/cloudflare/entrypoints/server",
 	"assets": {
@@ -10,5 +12,11 @@
 	},
 	"observability": {
 		"enabled": true
-	}
+	},
+	"kv_namespaces": [
+		{
+			"binding": "ASTRO_TEST_KV",
+			"id": "dd3b1299e6f74bf8ad3dc3c58cb0ccbc"
+		}
+	]
 }
