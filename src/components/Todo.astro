@@ -1,20 +1,27 @@
 ---
-import { getCollection } from 'astro:content';
+export const prerender = false;
 
-const todoItems = await getCollection('todoItems');
+import type { TodoItem } from '../types';
+
+interface Props {
+    items: TodoItem[];
+}
+
+const { items } = Astro.props as Props;
+
 ---
 
 <div id="container">
 	<h1>Todo list</h1>
     <p>Todo list page!</p>
     <li>
-        {todoItems.map((item) => (
+        {items.map((item) => (
             <div>
                 <a href={`/items/${item.id}`}>
-                    <h2>{item.data.name}</h2>
+                    <h2>{item.title}</h2>
                 </a>
-                <p>{item.data.description}</p>
-                {item.data.completed ? <p>Completed</p> : <p>Not completed</p>}
+                <p>{item.description}</p>
+                {item.completed ? <p>Completed</p> : <p>Not completed</p>}
             </div>
         ))}
     </li>

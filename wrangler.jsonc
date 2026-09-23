@@ -21,5 +21,12 @@
 	],
 	"vars": {
 		"ASTRO_TEST_VAR": "Hello from Astro!"
-	}
+	},
+	"d1_databases": [
+		{
+			"binding": "astro_d1_demo",
+			"database_name": "astro-d1-demo",
+			"database_id": "b413f307-c3fe-4e81-99f8-19c8d8b008ff"
+		}
+	]
 }

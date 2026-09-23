@@ -2,9 +2,65 @@
 import Layout from '../layouts/Layout.astro';
 import Todo from '../components/Todo.astro';
 import Header from '../components/Header.astro';
+
+export const prerender = false;
+
+import { env } from "cloudflare:workers";
+import type { TodoItem } from '../types';
+
+const { astro_d1_demo } = env;
+
+if (Astro.request.method === 'POST') {
+    const formData = await Astro.request.formData();
+    const title = formData.get('title')?.toString().trim();
+    const description = formData.get('description')?.toString().trim() ?? '';
+
+    if (title) {
+        await astro_d1_demo
+            .prepare('INSERT INTO TodoItems (title, description) VALUES (?, ?)')
+            .bind(title, description)
+            .run();
+    }
+
+    return Astro.redirect('/todo');
+}
+
+const { results: items } = await astro_d1_demo
+    .prepare("SELECT * FROM TodoItems")
+    .all<TodoItem>();
+
 ---
 
 <Layout>
     <Header />
-    <Todo />
+    <Todo items={items}/>
+
+    <form method="POST" id="new-item">
+        <h2>Add a todo item</h2>
+        <label>
+            Title
+            <input type="text" name="title" required />
+        </label>
+        <label>
+            Description
+            <textarea name="description"></textarea>
+        </label>
+        <button type="submit">Add</button>
+    </form>
 </Layout>
+
+<style>
+    #new-item {
+        margin: 1em;
+        display: flex;
+        flex-direction: column;
+        gap: 0.5em;
+        max-width: 24em;
+    }
+
+    #new-item label {
+        display: flex;
+        flex-direction: column;
+        gap: 0.25em;
+    }
+</style>

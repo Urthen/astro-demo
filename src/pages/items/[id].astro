@@ -1,0 +1,50 @@
+---
+export const prerender = false;
+
+import { env } from "cloudflare:workers";
+import Layout from '../../layouts/Layout.astro';
+import Header from '../../components/Header.astro';
+import type { TodoItem } from '../../types';
+
+const { astro_d1_demo } = env;
+const { id } = Astro.params;
+
+if (Astro.request.method === 'POST') {
+    await astro_d1_demo
+        .prepare("UPDATE TodoItems SET completed = TRUE, completed_at = CURRENT_TIMESTAMP WHERE id = ?")
+        .bind(id)
+        .run();
+
+    return Astro.redirect(`/items/${id}`);
+}
+
+const item = await astro_d1_demo
+    .prepare("SELECT * FROM TodoItems WHERE id = ?")
+    .bind(id)
+    .first<TodoItem>();
+
+if (!item) {
+    return new Response("Todo item not found", { status: 404 });
+}
+---
+
+<Layout>
+	<Header />
+	<div id="container">
+		<h1>{item.title}</h1>
+		<p>{item.description}</p>
+		{item.completed ? (
+			<p>Completed</p>
+		) : (
+			<form method="POST">
+				<button type="submit">Mark complete</button>
+			</form>
+		)}
+	</div>
+</Layout>
+
+<style>
+	#container {
+		margin: 1em;
+	}
+</style>
